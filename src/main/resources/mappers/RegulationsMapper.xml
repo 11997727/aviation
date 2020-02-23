@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.aviation.mapper.RegulationsMapper">
+<!--    RegulationsAndTypeAndClassify 三张表字段 -->
+<!--    <sql id="regulationsVo">-->
+<!--r.regulations_id,r.key,c.cid,r.classify_foreignkey,r.regulations_part_no,r.regulations_part_no_alias,r.regulations_version,r.regulations_name,r.regulations_show_status,regulations_icon_path,r.regulations_pdf_name-->
+<!--,r.regulations_pdf_path,r.regulations_version_explain,r.regulations_createtime,r.regulations_updatetime,c.cname,rt.regulations_type_name-->
+<!--    </sql>-->
+    <sql id="regulations">
+        `regulations_id`,`key`,`classify_foreignkey`,`regulations_part_no`,`regulations_part_no_alias`,`regulations_version`,`regulations_name`,`regulations_show_status`,`regulations_icon_path`,`regulations_pdf_name`
+,`regulations_pdf_path`,`regulations_version_explain`,`regulations_createtime`,`regulations_updatetime`
+    </sql>
+<!--    <sql id="regulationsVo2">-->
+<!--r.regulations_id,r.key,c.cid,r.classify_foreignkey,r.regulations_part_no,r.regulations_part_no_alias,r.regulations_version,r.regulations_name,r.regulations_show_status,-->
+<!--c.cname,rt.regulations_type_name-->
+<!--    </sql>-->
+    <select id="selectList" resultMap="regulations">
+        select `regulations_id`,`regulations_part_no`,`regulations_part_no_alias`,`regulations_version`,`regulations_name`,`regulations_show_status` from regulations
+        limit #{map.index},#{map.limit}
+    </select>
+<!--    <resultMap id="regulationsAndTypeAndClassify" type="com.example.aviation.model.vo.RegulationsAndTypeAndClassify">-->
+<!--        <id column="regulations_id" property="regulationsId"/>-->
+<!--        <result column="cid" property="cid"/>-->
+<!--        <result column="key" property="key"/>-->
+<!--        <result column="cname" property="cname"/>-->
+<!--        <result column="classify_foreignkey" property="classifyForeignKey"/>-->
+<!--        <result column="regulations_part_no" property="regulationsPartNo"/>-->
+<!--        <result column="regulations_part_no_alias" property="regulationsPartNoAlias"/>-->
+<!--        <result column="regulations_version" property="regulationsVersion"/>-->
+<!--        <result column="regulations_show_status" property="regulationsShowStatus"/>-->
+<!--        <result column="regulations_pdf_name" property="regulationsPdfName"/>-->
+<!--        <result column="regulations_pdf_path" property="regulationsPdfPath"/>-->
+<!--        <result column="regulations_createtime" property="regulationsCreatetime"/>-->
+<!--        <result column="regulations_updatetime" property="regulationsUpdatetime"/>-->
+<!--        <result column="regulations_type_name" property="regulationsTypeName"/>-->
+<!--        <result column="regulations_version_explain" property="regulationsVersionExplain"/>-->
+<!--        <result column="regulations_icon_path" property="regulationsIconPath"/>-->
+<!--        <result column="regulations_name" property="regulationsName"/>-->
+<!--    </resultMap>-->
+    <select id="selectListCount" resultType="java.lang.Long">
+        select count(*) from regulations
+    </select>
+    <delete id="delRegulationsById">
+        DELETE FROM regulations WHERE regulations_id=#{regulationsId}
+    </delete>
+    <insert id="addRegulations">
+        insert into regulations (`regulations_part_no`,`regulations_part_no_alias`,`regulations_version`,`regulations_name`,`regulations_show_status`,`regulations_icon_path`,`regulations_pdf_name`,`regulations_pdf_path`,`regulations_version_explain`,`regulations_createtime`,`classify_foreignkey`,`key`)
+        VALUES (#{regulationsPartNo},#{regulationsPartNoAlias},#{regulationsVersion},#{regulationsName},#{regulationsShowStatus},#{regulationsIconPath},#{regulationsPdfName},#{regulationsPdfPath},#{regulationsVersionExplain},SYSDATE(),#{cid},#{key})
+    </insert>
+    <select id="selectRegulationsByRegulationsId" resultMap="regulations">
+        select <include refid="regulations"/> from regulations where regulations_id=#{regulationsId}
+    </select>
+    <update id="updateRegulations">
+        update regulations set `key`=#{key},`regulations_part_no`=#{regulationsPartNo},`regulations_part_no_alias`=#{regulationsPartNoAlias},`regulations_version`=#{regulationsVersion},`regulations_name`=#{regulationsName},`regulations_show_status`=#{regulationsShowStatus}
+        ,`regulations_icon_path`=#{regulationsIconPath},`regulations_pdf_name`=#{regulationsPdfName},`regulations_pdf_path`=#{regulationsPdfPath},`regulations_version_explain`=#{regulationsVersionExplain},`regulations_updatetime`=SYSDATE() where `regulations_id`=#{regulationsId}
+    </update>
+    <select id="selectRegulationsNameAndId" resultMap="regulations">
+        select `regulations_id`,`regulations_name` from regulations where classify_foreignkey=#{cid}
+    </select>
+    <resultMap id="regulations" type="com.example.aviation.model.entity.Regulations">
+        <id column="regulations_id" property="regulationsId"/>
+        <result column="regulations_show_status" property="regulationsShowStatus"/>
+        <result column="regulations_version" property="regulationsVersion"/>
+        <result column="regulations_part_no_alias" property="regulationsPartNoAlias"/>
+        <result column="regulations_name" property="regulationsName"/>
+        <result column="regulations_part_no" property="regulationsPartNo"/>
+        <result column="regulations_createtime" property="regulationsCreatetime"/>
+        <result column="regulations_icon_path" property="regulationsIconPath"/>
+        <result column="key" property="key"/>
+        <result column="regulations_version_explain" property="regulationsVersionExplain"/>
+        <result column="regulations_pdf_path" property="regulationsPdfPath"/>
+        <result column="regulations_pdf_name" property="regulationsPdfName"/>
+        <result column="regulations_updatetime" property="regulationsUpdatetime"/>
+        <result column="classify_foreignkey" property="classifyForeignKey"/>
+    </resultMap>
+    <select id="selectAllRegulationsNameAndId" resultMap="regulations">
+        select `regulations_id`,`regulations_name` from regulations
+    </select>
+    <select id="showRegulations" resultMap="regulations">
+        select regulations_id,regulations_part_no,regulations_icon_path ,regulations_createtime FROM regulations WHERE regulations_show_status='1' ORDER BY regulations_createtime desc LIMIT 0,9
+    </select>
+    <select id="selectRegulationsByCid" resultType="java.lang.Integer">
+        select `regulations_id` from regulations where classify_foreignkey=#{cid}
+    </select>
+    <delete id="updateRegulationsByRegulationsIdList">
+        update regulations set classify_foreignkey='0' where regulations_id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <select id="selectRegulationsByCidList" resultType="java.lang.Integer">
+        select `regulations_id` from regulations where classify_foreignkey in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+</mapper>

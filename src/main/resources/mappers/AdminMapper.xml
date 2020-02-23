@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.aviation.mapper.AdminMapper">
+
+  <select id="selectAdminByPhoneAndPassword" resultMap="admin">
+    SELECT admin_id,admin_phone,admin_name,admin_createtime,admin_delete_status,admin_password,admin_type FROM admin
+    where admin_delete_status=1 and admin_phone=#{adminPhone} and admin_password=#{adminPassword}
+  </select>
+  <resultMap id="admin" type="com.example.aviation.model.entity.Admin">
+    <id column="admin_id" property="adminId"/>
+    <result column="admin_createtime" property="adminCreatetime"/>
+    <result column="admin_delete_status" property="adminDeleteStatus"/>
+    <result column="admin_name" property="adminName"/>
+    <result column="admin_password" property="adminPassword"/>
+    <result column="admin_phone" property="adminPhone"/>
+    <result column="admin_type" property="adminType"/>
+   </resultMap>
+  <select id="initWeb" resultMap="web">
+    SELECT `web_id`,`web_status`,`web_title`,`web_domain_name`,`web_logo_path`,`web_email`,`language` FROM webseting
+  </select>
+  <resultMap id="web" type="com.example.aviation.model.entity.Webseting">
+    <id column="web_id" property="webId"/>
+    <result column="language" property="language"/>
+    <result column="web_domain_name" property="webDomainName"/>
+    <result column="web_email" property="webEmail"/>
+    <result column="web_status" property="webStatus"/>
+    <result column="web_title" property="webTitle"/>
+    <result column="web_logo_path" property="webLogoPath"/>
+  </resultMap>
+  <update id="updateWeb">
+    update webseting set `web_status`=#{webStatus},`web_title`=#{webTitle},`web_domain_name`=#{webDomainName},`web_logo_path`=#{webLogoPath},`web_email`=#{webEmail},`language`=#{language} where web_id=#{webId}
+  </update>
+  <select id="initKey" resultMap="key">
+    select `note_id`,`api_key` from note
+  </select>
+  <resultMap id="key" type="com.example.aviation.model.entity.Note">
+    <id column="note_id" property="noteId"/>
+    <result column="api_key" property="apiKey"/>
+  </resultMap>
+  <delete id="updateKey">
+    update note set `api_key`=#{apiKey} where `note_id`=#{noteId}
+  </delete>
+  <select id="initSmtp" resultMap="smtp">
+    SELECT `smtp_id`,`smtp_email`,`smtp_server`,`smtp_username`,`smtp_password`,`number`,`login_type` FROM email_smtp_setting
+  </select>
+  <resultMap id="smtp" type="com.example.aviation.model.entity.EmailSmtpSetting">
+  <id column="smtp_id" property="smtpId"/>
+    <result column="login_type" property="loginType"/>
+    <result column="smtp_email" property="smtpEmail"/>
+    <result column="smtp_server" property="smtpServer"/>
+    <result column="smtp_username" property="smtpUsername"/>
+    <result column="smtp_password" property="smtpPassword"/>
+    <result column="number" property="number"/>
+  </resultMap>
+  <update id="updateSmtp">
+    update email_smtp_setting set `smtp_email`=#{smtpEmail},`smtp_server`=#{smtpServer},`smtp_username`=#{smtpUsername},`smtp_password`=#{smtpPassword},`number`=#{number},`login_type`=#{loginType} where `smtp_id`=#{smtpId}
+  </update>
+  <select id="initAboutus" resultMap="aboutus">
+    select `aboutus_id`,`aboutus_content`from aboutus
+  </select>
+  <resultMap id="aboutus" type="com.example.aviation.model.entity.Aboutus">
+<id column="aboutus_id" property="aboutusId"/>
+    <result column="aboutus_content" property="aboutusContent"/>
+  </resultMap>
+  <select id="initService" resultMap="service">
+    select service_id,service_agreement_content from service_agreement
+  </select>
+  <resultMap id="service" type="com.example.aviation.model.entity.ServiceAgreement">
+    <result column="service_id" property="serviceId"/>
+    <result column="service_agreement_content" property="serviceAgreementContent"/>
+  </resultMap>
+
+
+  <update id="updateAboutus">
+    update aboutus set `aboutus_content`=#{aboutusContent} where `aboutus_id`=#{aboutusId}
+  </update>
+  <update id="updateService">
+    update service_agreement set `service_agreement_content`=#{serviceAgreementContent} where `service_id`=#{serviceId}
+  </update>
+
+  <select id="selectAdminList" resultMap="admin">
+    select * from admin where `admin_type`!='2' and `admin_delete_status` !=2 limit #{map.index},#{map.limit}
+  </select>
+
+
+  <select id="selectAdminListCount" resultType="java.lang.Long">
+    select count(*) from admin where `admin_type`!='2' and `admin_delete_status` !=2
+  </select>
+  <select id="isPhone" resultMap="admin">
+    select * from admin where `admin_delete_status` !=2 and `admin_phone`=#{adminPhone}
+  </select>
+  <insert id="addAdmin">
+    insert into admin (`admin_createtime`,`admin_name`,`admin_password`,`admin_phone`)values (SYSDATE(),#{adminName},#{adminPassword},#{adminPhone})
+  </insert>
+  <update id="updateAdmin">
+    update admin set `admin_name`=#{adminName},`admin_password`=#{adminPassword},`admin_phone`=#{adminPhone} where admin_id=#{adminId}
+  </update>
+  <update id="delAdmin">
+    update admin set `admin_delete_status`=2 where admin_id=#{adminId}
+  </update>
+
+</mapper>

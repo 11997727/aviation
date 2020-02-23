@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.aviation.mapper.ConsultMapper">
+
+    <select id="selectConsultList" resultMap="consult">
+        SELECT `consult_content`,`consult_createtime`,`consult_id`,`user_name`,`user_phone`,`clauseNo` FROM consult c JOIN `user` u ON c.user_foreign_key=u.user_id AND
+        u.user_delete_status='1' where c.consult_delete_status='1' limit #{map.index},#{map.limit}
+    </select>
+    <resultMap id="consult" type="com.example.aviation.model.vo.ConsultVo">
+    <id column="consult_id" property="consultId"/>
+        <result column="user_phone" property="userPhone"/>
+        <result column="user_name" property="userName"/>
+        <result column="clauseNo" property="clauseNo"/>
+        <result column="consult_content" property="consultContent"/>
+        <result column="consult_createtime" property="consultCreatetime"/>
+    </resultMap>
+    <select id="selectConsultListCount" resultType="java.lang.Long">
+SELECT count(*) FROM consult c JOIN `user` u ON c.user_foreign_key=u.user_id AND
+u.user_delete_status='1'  where c.consult_delete_status='1'
+    </select>
+    <update id="delConsult">
+        update consult set consult_delete_status='2' where consult_id=#{consultId}
+    </update>
+</mapper>

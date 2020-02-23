@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.aviation.mapper.ClassifyMapper">
+
+    <select id="selectClassifyByRegulationsTypeId" resultType="com.example.aviation.model.entity.Classify">
+        select * from classify where ck=#{regulationsTypeId}
+    </select>
+    <update id="updateClassifyByCid">
+        UPDATE classify SET `cname`=#{cname} WHERE cid =#{cid}
+    </update>
+    <delete id="delClassifyByCid">
+        delete from classify where cid=#{cid}
+    </delete>
+    <insert id="addCassify">
+        insert into classify (`ck`,`cname`)values (#{ck},#{cname})
+    </insert>
+    <select id="selectCassifyByCid" resultType="com.example.aviation.model.entity.Classify">
+        select * FROM classify WHERE ck in (
+SELECT ck FROM classify WHERE cid=#{cid}
+)
+    </select>
+    <select id="selectCassifyByCk" resultType="java.lang.Integer">
+        select cid from classify where ck=#{regulationsTypeId}
+    </select>
+    <delete id="delClassifyByCidList">
+        delete from classify where cid in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

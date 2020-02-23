@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.aviation.mapper.DirectoryMapper">
+
+
+    <select id="selectDeprecatedIds" resultType="java.lang.Integer">
+        SELECT directory_id from `directory` WHERE regulations_foreign_key=#{regulationsId}
+    </select>
+    <delete id="deleteDeprecated">
+        DELETE FROM `directory` WHERE regulations_foreign_key =#{regulationsId}
+
+    </delete>
+    <resultMap id="deprecated" type="com.example.aviation.model.dto.TreeNode">
+        <id column="directory_id" property="id" />
+        <result column="directory_key" property="directoryKey"/>
+        <result column="directory_nama" property="label"/>
+        <result column="level" property="lever"/>
+        <result column="parent_id" property="pid"/>
+        <result column="distance" property="distance"/>
+    </resultMap>
+    <select id="selectTreeNode" resultMap="deprecated">
+            select `directory_id`,`directory_nama`,`parent_id`,`level`,`directory_key`,`distance` from `directory` where regulations_foreign_key=#{regulationsId} ORDER BY level DESC
+    </select>
+    <insert id="addOneDirectoryById">
+        insert into directory (`directory_nama`,`level`,`regulations_foreign_key`,`distance`,`directory_key`,`parent_id`)
+        values (#{directoryNama},#{level},#{regulationsForeignKey},1,'-',0)
+    </insert>
+
+    <insert id="addZiDirectory" useGeneratedKeys="true" keyProperty="directoryId" keyColumn="directory_id" >
+        INSERT INTO directory(`directory_id`,`directory_nama`,`parent_id`,`directory_key`,`distance`,`level`,`regulations_foreign_key`)values(null,#{directoryNama},#{parentId},#{directoryKey},#{distance},#{level},#{regulationsForeignKey})
+    </insert>
+    <select id="selectDirectoryIdByDirectoryKey" resultType="java.lang.Integer">
+        select directory_id from directory where directory_key like CONCAT(#{directoryKey},'%')
+    </select>
+
+
+    <delete id="delDirectorys">
+        DELETE FROM directory WHERE directory_id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <update id="updateDirectoryById">
+        update directory set `directory_nama`=#{directoryNama},`level`=#{level} where directory_id=#{directoryId}
+    </update>
+    <select id="selectTreeNode2" resultMap="weixinfaguimulu">
+        select `directory_id`,`directory_nama`,`parent_id` from `directory` where regulations_foreign_key=#{regulationsId}
+    </select>
+    <resultMap id="weixinfaguimulu" type="com.example.aviation.model.dto.RegulationsDirectory">
+        <id column="directory_id" property="id"/>
+        <result column="directory_nama" property="title"/>
+        <result column="parent_id" property="pid"/>
+    </resultMap>
+    <select id="selectDeprecatedIdsByRegulationsList" resultType="java.lang.Integer">
+        select directory_id from directory where regulations_foreign_key in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+</mapper>

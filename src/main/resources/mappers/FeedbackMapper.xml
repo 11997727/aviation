@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.aviation.mapper.FeedbackMapper">
+
+    <select id="selectFeedbackList" resultMap="feedback">
+        select `feedback_id`,`feedback_content`,`feedback_createtime` from feedback where feedback_delete_status=1 limit #{map.index},#{map.limit}
+    </select>
+    <select id="selectFeedbackListCount" resultType="java.lang.Long">
+        select count(*) from feedback where feedback_delete_status=1
+    </select>
+    <resultMap id="feedback" type="com.example.aviation.model.entity.Feedback">
+        <id column="feedback_id" property="feedbackId"/>
+        <result column="feedback_content" property="feedbackContent"/>
+        <result column="feedback_createtime" property="feedbackCreatetime"/>
+    </resultMap>
+    <update id="delFeedbackByFeedbackId">
+        update feedback set `feedback_delete_status`=2 where feedback_id=#{feedbackId}
+    </update>
+    <select id="queryFeedbackByFeedbackId" resultMap="feedback">
+        select `feedback_content` from feedback where feedback_id=#{feedbackId}
+    </select>
+</mapper>

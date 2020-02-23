@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.aviation.mapper.ClauseMapper">
+
+    <select id="selectClauseId" resultType="java.lang.Integer">
+        select clause_id from clause where directory_foreign_key in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+    <delete id="delClause">
+        DELETE FROM clause WHERE directory_foreign_key in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <select id="selectClauseList" resultMap="clause">
+select clause_id,clause_no,clause_no_alias,clause_version,clause_title,regulations_name FROM clause JOIN
+regulations ON clause.regulations_foreignkey = regulations.regulations_id
+<where>
+    <if test="map.regulationsId !=null and map.regulationsId !='' ">
+        and regulations.regulations_id =#{map.regulationsId}
+    </if>
+    <if test="map.clauseAntistop !=null and map.clauseAntistop !='' ">
+        and clause.clause_antistop =#{map.clauseAntistop}
+    </if>
+    <if test="map.clauseNo !=null and map.clauseNo !=''">
+        and clause.clause_no=#{map.clauseNo}
+    </if>
+</where>
+        limit #{map.index},#{map.limit}
+    </select>
+    <resultMap id="clause" type="com.example.aviation.model.vo.ClauseVo">
+        <id column="clause_id" property="clauseId"/>
+        <result column="clause_no" property="clauseNo"/>
+        <result column="clause_no_alias" property="clauseNoAlias"/>
+        <result column="clause_version" property="clauseVersion"/>
+        <result column="clause_title" property="clauseTitle"/>
+        <result column="regulations_name" property="regulationsName"/>
+        <result column="directory_foreign_key" property="directoryForeignKey"/>
+        <result column="regulations_foreignkey" property="regulationsForeignkey"/>
+        <result column="clause_antistop" property="clauseAntistop"/>
+        <result column="clause_content" property="clauseContent"/>
+     </resultMap>
+    <select id="selectClauseListCount" resultType="java.lang.Long">
+        select count(*) FROM clause JOIN
+regulations ON clause.regulations_foreignkey = regulations.regulations_id
+    </select>
+    <delete id="delClauseById">
+        delete from clause where clause_id=#{clauseId}
+    </delete>
+    <insert id="addClauseById">
+        INSERT INTO clause (`directory_foreign_key`,`regulations_foreignkey`,`clause_no`,`clause_no_alias`,`clause_version`,`clause_title`,`clause_content`,`clause_antistop`,`clause_createtime`)
+        VALUES(#{directoryForeignKey},#{regulationsId},#{clauseNo},#{clauseNoAlias},#{clauseVersion},#{clauseTitle},#{clauseContent},#{clauseAntistop},SYSDATE())
+    </insert>
+    <select id="selectClauseByClauseId" resultMap="clause">
+        select clause_id,clause_no,clause_no_alias,clause_version,clause_title,directory_foreign_key,regulations_foreignkey,clause_antistop,clause_content FROM
+        clause where clause_id=#{clauseId}
+    </select>
+    <update id="updateClauseByClauseId">
+        update clause set `directory_foreign_key`=#{directoryForeignKey},`regulations_foreignkey`=#{regulationsId},`clause_no`=#{clauseNo},`clause_no_alias`=#{clauseNoAlias},`clause_version`=#{clauseVersion},`clause_title`=#{clauseTitle},`clause_content`=#{clauseContent},`clause_antistop`=#{clauseAntistop},`clause_updatetime`=SYSDATE()
+        where clause_id=#{clauseId}
+    </update>
+    <select id="selectClauseBydirectoryForeignKey" resultMap="clauses">
+        select clause_id,clause_no,clause_no_alias,clause_version,clause_title FROM
+        clause where directory_foreign_key=#{directoryForeignKey}
+    </select>
+    <resultMap id="clauses" type="com.example.aviation.model.entity.Clause">
+        <id column="clause_id" property="clauseId"/>
+        <result column="clause_no" property="clauseNo"/>
+        <result column="clause_no_alias" property="clauseNoAlias"/>
+        <result column="clause_version" property="clauseVersion"/>
+        <result column="clause_title" property="clauseTitle"/>
+    </resultMap>
+</mapper>

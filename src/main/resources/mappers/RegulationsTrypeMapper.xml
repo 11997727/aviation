@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.aviation.mapper.RegulationsTrypeMapper">
+
+    <select id="selectAll" resultMap="regulationsType">
+        SELECT * FROM regulations_trype left JOIN classify on `regulations_type_id`=`ck`
+    </select>
+    <resultMap id="regulationsType" type="com.example.aviation.model.vo.RegulationsTrypeAndClassify">
+        <id column="regulations_type_id" property="regulationsTypeId"/>
+        <result column="regulations_type_name" property="regulationsTypeName"/>
+        <collection property="classifyList" ofType="com.example.aviation.model.entity.Classify">
+            <id column="cid" property="cid"/>
+
+            <result column="cname" property="cname"/>
+        </collection>
+    </resultMap>
+    <insert id="insertOneType">
+       INSERT INTO regulations_trype (`regulations_type_name`)VALUES(#{regulationsTypeName})
+    </insert>
+    <select id="selectAllOneType" resultMap="OneType">
+        select regulations_type_id,regulations_type_name from regulations_trype
+    </select>
+    <resultMap id="OneType" type="com.example.aviation.model.entity.RegulationsTrype">
+        <id column="regulations_type_id" property="regulationsTypeId"/>
+        <result column="regulations_type_name" property="regulationsTypeName"/>
+    </resultMap>
+    <delete id="delregulationsTrype">
+        delete from regulations_trype where regulations_type_id=#{regulationsTypeId}
+    </delete>
+</mapper>
