@@ -45,10 +45,9 @@ public class RegulationsTrypeServiceImpl implements RegulationsTrypeService {
     }
 
     @Override
-    @Transactional
-    public Map<String, Object> addOneType(String regulationsTypeName)throws Exception {
+    @Transactional(rollbackFor = Exception.class)
+    public Map<String, Object> addOneType(String regulationsTypeName)throws RuntimeException,Exception {
         Map<String,Object>resultMap=new HashMap<String, Object>();
-        try {
             resultMap.put("msg","failed");
             resultMap.put("code",2004);
             Integer integer = regulationsTrypeMapper.insertOneType(regulationsTypeName);
@@ -56,9 +55,6 @@ public class RegulationsTrypeServiceImpl implements RegulationsTrypeService {
                 resultMap.put("msg","success");
                 resultMap.put("code",2001);
             }
-        }catch (Exception e){
-            new RuntimeException();
-        }
         return resultMap;
     }
 

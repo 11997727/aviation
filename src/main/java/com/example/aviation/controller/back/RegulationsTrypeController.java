@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author 吴成卓
@@ -41,17 +39,8 @@ public class RegulationsTrypeController {
      * @return
      */
     @RequestMapping("/addOneType")
-    public String addOneType(@RequestParam("regulationsTypeName") String regulationsTypeName ){
-        Map<String, Object> map = new HashMap<>();
-        try {
-            map = regulationsTrypeService.addOneType(regulationsTypeName);
-        } catch (Exception e) {
-            map.put("msg","error");
-            map.put("code",4000);
-            e.printStackTrace();
-        }finally {
-            return JSON.toJSONString(map);
-        }
+    public String addOneType(@RequestParam("regulationsTypeName") String regulationsTypeName ) throws Exception {
+            return JSON.toJSONString(regulationsTrypeService.addOneType(regulationsTypeName));
     }
 
     /**

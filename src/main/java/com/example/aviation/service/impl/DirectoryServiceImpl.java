@@ -101,12 +101,12 @@ public class DirectoryServiceImpl implements DirectoryService {
     }
 
     @Override
-    @Transactional
-    public Map<String, Object> delDirectory(Directory directory)throws Exception {
+    @Transactional(rollbackFor = Exception.class)
+    public Map<String, Object> delDirectory(Directory directory)throws RuntimeException, Exception {
         Map<String,Object>resultMap=new HashMap<String, Object>();
         resultMap.put("msg","failed");
         resultMap.put("code",2004);
-        try{
+
         //先查询出来要删除的目录主键
         List<Integer> list = directoryMapper.selectDirectoryIdByDirectoryKey(directory);
         list.add(directory.getDirectoryId());
@@ -129,28 +129,20 @@ public class DirectoryServiceImpl implements DirectoryService {
                 resultMap.put("code",2001);
             }
         }
-        }catch (Exception e){
-           e.printStackTrace();
-            new RuntimeException();
-        }
         return resultMap;
     }
 
     @Override
-    public Map<String, Object> updateDirectoryById(Directory directory) throws Exception {
+    @Transactional(rollbackFor = Exception.class)
+    public Map<String, Object> updateDirectoryById(Directory directory) throws RuntimeException, Exception {
         Map<String,Object>resultMap=new HashMap<String, Object>();
         resultMap.put("msg","failed");
         resultMap.put("code",2004);
-        try {
         Integer integer=  directoryMapper.updateDirectoryById(directory);
             if(integer>0){
                 resultMap.put("msg","success");
                 resultMap.put("code",2001);
             }
-        }catch (Exception e){
-            e.printStackTrace();
-            new RuntimeException();
-        }
         return resultMap;
     }
 

@@ -48,7 +48,7 @@ public interface RegulationsService {
      * @return
      * @throws Exception
      */
-    Map<String,Object>updateRegulations(RegulationsDto regulationsDto);
+    Map<String,Object>updateRegulations(RegulationsDto regulationsDto) throws Exception;
 
     /**
      * 查询某二级分类下的法规名称和主键

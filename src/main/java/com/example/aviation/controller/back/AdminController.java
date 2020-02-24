@@ -3,6 +3,7 @@ package com.example.aviation.controller.back;
 import com.alibaba.fastjson.JSON;
 import com.example.aviation.model.entity.*;
 import com.example.aviation.service.AdminService;
+import com.example.aviation.utils.ApplicationParams;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -60,7 +61,7 @@ public class AdminController {
      */
     @PostMapping("/initKey")
     public String initKey(){
-        return JSON.toJSONString(adminService.initKey());
+        return JSON.toJSONString(ApplicationParams.note);
     }
 
     /**
@@ -79,7 +80,7 @@ public class AdminController {
      */
     @PostMapping("/initSmtp")
     public String initSmtp(){
-        return JSON.toJSONString(adminService.initSmtp());
+        return JSON.toJSONString(ApplicationParams.emailSmtpSetting);
     }
 
     /**

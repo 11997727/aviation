@@ -6,7 +6,6 @@ import com.example.aviation.service.DirectoryService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -60,17 +59,8 @@ public class DirectoryController {
      * @return
      */
     @RequestMapping("/delDirectory")
-    public String delDirectory( Directory directory){
-        Map<String,Object>map=new HashMap<>();
-        try {
-            map =directoryService.delDirectory(directory);
-        } catch (Exception e) {
-            map.put("msg","error");
-            map.put("code",4000);
-            e.printStackTrace();
-        }finally {
-            return JSON.toJSONString(map);
-        }
+    public String delDirectory( Directory directory) throws Exception {
+        return JSON.toJSONString(directoryService.delDirectory(directory));
     }
 
     /**
@@ -78,17 +68,7 @@ public class DirectoryController {
      * @return
      */
     @RequestMapping("/updateDirectoryById")
-    public String updateDirectory(@RequestBody Directory directory){
-        Map<String,Object>map=new HashMap<>();
-        try {
-            map =directoryService.updateDirectoryById(directory);
-        } catch (Exception e) {
-            map.put("msg","error");
-            map.put("code",4000);
-            e.printStackTrace();
-        }finally {
-            return JSON.toJSONString(map);
-        }
-
+    public String updateDirectory(@RequestBody Directory directory) throws Exception {
+        return JSON.toJSONString(directoryService.updateDirectoryById(directory));
     }
 }

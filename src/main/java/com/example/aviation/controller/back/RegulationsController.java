@@ -52,17 +52,9 @@ public class RegulationsController {
      * @return
      */
     @RequestMapping(value = "/delRegulations")
-    public String delRegulations(@RequestParam(value = "regulationsId") Integer regulationsId){
-        Map<String, Object> map = new HashMap<>();
-        try {
-            map = regulationsService.delRegulations(regulationsId);
-        } catch (Exception e) {
-            map.put("msg","error");
-            map.put("code",4000);
-            e.printStackTrace();
-        }finally {
-            return JSON.toJSONString(map);
-        }
+    public String delRegulations(@RequestParam(value = "regulationsId") Integer regulationsId) throws Exception {
+            return JSON.toJSONString(regulationsService.delRegulations(regulationsId));
+
     }
 
     /**
@@ -122,17 +114,8 @@ public class RegulationsController {
      * @return
      */
     @RequestMapping("/addRegulations")
-    public String addAddRegulationsDto(@RequestBody RegulationsDto regulationsDto){
-        Map<String,Object>map=new HashMap<>();
-        try {
-            map = regulationsService.addRegulations(regulationsDto);
-        } catch (Exception e) {
-            map.put("msg","error");
-            map.put("code",4000);
-            e.printStackTrace();
-        }finally {
-            return JSON.toJSONString(map);
-        }
+    public String addAddRegulationsDto(@RequestBody RegulationsDto regulationsDto) throws Exception {
+       return JSON.toJSONString(regulationsService.addRegulations(regulationsDto));
     }
 
     /**
@@ -141,18 +124,8 @@ public class RegulationsController {
      * @return
      */
     @RequestMapping("/updateRegulations")
-    public String updateRegulationsDto(@RequestBody RegulationsDto regulationsDto){
-        System.out.println(regulationsDto);
-        Map<String,Object>map=new HashMap<>();
-        try {
-            map = regulationsService.updateRegulations(regulationsDto);
-        } catch (Exception e) {
-            map.put("msg","error");
-            map.put("code",4000);
-            e.printStackTrace();
-        }finally {
-            return JSON.toJSONString(map);
-        }
+    public String updateRegulationsDto(@RequestBody RegulationsDto regulationsDto) throws Exception {
+        return JSON.toJSONString(regulationsService.updateRegulations(regulationsDto));
     }
 
     /**

@@ -3,6 +3,7 @@ package com.example.aviation.service.impl;
 import com.example.aviation.mapper.AdminMapper;
 import com.example.aviation.model.entity.*;
 import com.example.aviation.service.AdminService;
+import com.example.aviation.utils.ApplicationParams;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -84,6 +85,7 @@ public class AdminServiceImpl implements AdminService {
         resultMap.put("code",2004);
         Integer integer = adminMapper.updateKey(note);
         if(integer>0){
+            ApplicationParams.note=note;
             resultMap.put("msg","success");
             resultMap.put("code",2001);
         }
@@ -111,6 +113,7 @@ public class AdminServiceImpl implements AdminService {
         resultMap.put("code",2004);
         Integer integer = adminMapper.updateSmtp(emailSmtpSetting);
         if(integer>0){
+            ApplicationParams.emailSmtpSetting=emailSmtpSetting;
             resultMap.put("msg","success");
             resultMap.put("code",2001);
         }

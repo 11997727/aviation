@@ -51,12 +51,11 @@ public class RegulationsServiceImpl implements RegulationsService {
     }
 
     @Override
-    @Transactional
-    public Map<String, Object> delRegulations(Integer regulationsId)throws Exception{
+    @Transactional(rollbackFor = Exception.class)
+    public Map<String, Object> delRegulations(Integer regulationsId)throws RuntimeException, Exception{
         Map<String,Object>resultMap=new HashMap<String, Object>();
         resultMap.put("msg","failed");
         resultMap.put("code",2004);
-        try {
         //先根据法规id查询所有的目录的id
         List<Integer> integers = directoryMapper.selectDeprecatedIds(regulationsId);
         if(integers.size()==0){
@@ -99,17 +98,14 @@ public class RegulationsServiceImpl implements RegulationsService {
                     }
                 }
             }
-        }catch (Exception e){
-            new RuntimeException();
-        }
+
         return resultMap;
     }
 
     @Override
-    @Transactional
-    public Map<String, Object> addRegulations(RegulationsDto regulationsDto) throws Exception {
+    @Transactional(rollbackFor = Exception.class)
+    public Map<String, Object> addRegulations(RegulationsDto regulationsDto) throws RuntimeException, Exception {
         Map<String,Object>resultMap=new HashMap<String, Object>();
-        try {
             resultMap.put("msg","failed");
             resultMap.put("code",2004);
             Integer integer = regulationsMapper.addRegulations(regulationsDto);
@@ -117,9 +113,6 @@ public class RegulationsServiceImpl implements RegulationsService {
                 resultMap.put("msg","success");
                 resultMap.put("code",2001);
             }
-        }catch (Exception e){
-            new RuntimeException();
-        }
         return resultMap;
     }
 
@@ -138,7 +131,8 @@ public class RegulationsServiceImpl implements RegulationsService {
     }
 
     @Override
-    public Map<String, Object> updateRegulations(RegulationsDto regulationsDto) {
+    @Transactional(rollbackFor = Exception.class)
+    public Map<String, Object> updateRegulations(RegulationsDto regulationsDto)throws RuntimeException, Exception {
         Map<String,Object>resultMap=new HashMap<String, Object>();
         resultMap.put("msg","failed");
         resultMap.put("code",2004);
@@ -146,12 +140,10 @@ public class RegulationsServiceImpl implements RegulationsService {
         if(integer>0){
             resultMap.put("msg","success");
             resultMap.put("code",2001);
-
         }
         return resultMap;
     }
 
-    //Regulations
     @Override
     public Map<String, Object> showRegulationsNameAndId(Integer cid) {
         Map<String,Object>resultMap=new HashMap<String, Object>();
