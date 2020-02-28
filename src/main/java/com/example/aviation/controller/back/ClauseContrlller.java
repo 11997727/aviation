@@ -3,6 +3,8 @@ package com.example.aviation.controller.back;
 import com.alibaba.fastjson.JSON;
 import com.example.aviation.model.vo.ClauseVo;
 import com.example.aviation.service.ClauseService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -23,7 +25,7 @@ import java.util.Map;
 public class ClauseContrlller {
 @Resource
 private ClauseService clauseService;
-
+    private static Logger LOGGER = LoggerFactory.getLogger(ClauseContrlller.class);
     /**
      * 法规列表
      * @param limit 每页记录数
@@ -42,6 +44,7 @@ private ClauseService clauseService;
         map.put("regulationsId",regulationsId);
         map.put("clauseAntistop",clauseAntistop);
         map.put("clauseNo",clauseNo);
+        LOGGER.info("访问了showClause");
         return JSON.toJSONString(clauseService.selectClauseList(map));
     }
 
@@ -52,6 +55,7 @@ private ClauseService clauseService;
      */
     @RequestMapping("/delClause")
     public String delClause(@RequestParam("clauseId") Integer clauseId){
+        LOGGER.info("访问了delClause");
         return JSON.toJSONString(clauseService.delClause(clauseId));
     }
 
@@ -62,6 +66,7 @@ private ClauseService clauseService;
      */
     @RequestMapping("/addClause")
     public String addClause(@RequestBody ClauseVo clauseVo){
+        LOGGER.info("访问了addClause");
      return JSON.toJSONString(clauseService.addClause(clauseVo));
     }
 
@@ -72,6 +77,7 @@ private ClauseService clauseService;
      */
     @RequestMapping("/queryClauseByClauseId")
     public String queryClauseByClauseId(@RequestParam("clauseId") Integer clauseId){
+        LOGGER.info("访问了queryClauseByClauseId");
         return JSON.toJSONString(clauseService.queryClauseByClauseId(clauseId));
     }
 
@@ -84,6 +90,7 @@ private ClauseService clauseService;
      */
     @RequestMapping("/updateClause")
     public String updateClauseByClauseId(@RequestBody ClauseVo clauseVo){
+        LOGGER.info("访问了updateClause");
         return JSON.toJSONString(clauseService.updateClauseByClauseId(clauseVo));
     }
 }

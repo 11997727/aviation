@@ -2,6 +2,8 @@ package com.example.aviation.controller.back;
 
 import com.alibaba.fastjson.JSON;
 import com.example.aviation.service.FeedbackService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +27,7 @@ import java.util.Map;
 public class FeedbackController {
     @Resource
     private FeedbackService feedbackService;
-
+    private static Logger LOGGER = LoggerFactory.getLogger(FeedbackController.class);
     /**
      * 反馈列表
      * @param limit 每页记录数
@@ -39,6 +41,7 @@ public class FeedbackController {
         Map<String ,Object> map = new HashMap<>();
         map.put("page",page);
         map.put("limit",limit);
+        LOGGER.info("访问了feedbackList");
         return JSON.toJSONString(feedbackService.selectFeedbackList(map));
     }
 
@@ -49,6 +52,7 @@ public class FeedbackController {
      */
     @RequestMapping("/delFeedback")
     public String delFeedback(@RequestParam("feedbackId")Integer feedbackId){
+        LOGGER.info("访问了delFeedback");
         return JSON.toJSONString(feedbackService.delFeedbackByFeedbackId(feedbackId));
     }
 
@@ -60,6 +64,7 @@ public class FeedbackController {
      */
     @RequestMapping("/queryFeedbackByFeedbackId")
     public String queryFeedbackByFeedbackId(@RequestParam("feedbackId")Integer feedbackId){
+        LOGGER.info("访问了queryFeedbackByFeedbackId");
         return JSON.toJSONString(feedbackService.queryFeedbackByFeedbackId(feedbackId));
     }
 }

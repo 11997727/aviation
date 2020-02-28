@@ -2,6 +2,8 @@ package com.example.aviation.controller.back;
 
 import com.alibaba.fastjson.JSON;
 import com.example.aviation.service.ClassifyService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -20,7 +22,7 @@ import javax.annotation.Resource;
 public class ClassifyController {
     @Resource
     private ClassifyService classifyService;
-
+    private static Logger LOGGER = LoggerFactory.getLogger(ClassifyController.class);
     /**
      * 根据一级分类展示二级分类列表
      * @param regulationsTypeId
@@ -28,6 +30,7 @@ public class ClassifyController {
      */
     @RequestMapping("/classifyList")
     public String showClassifyList(@RequestParam("regulationsTypeId")Integer regulationsTypeId){
+        LOGGER.info("访问了classifyList");
         return JSON.toJSONString(classifyService.queryClassifyByRegulationsTypeId(regulationsTypeId));
     }
 
@@ -39,6 +42,7 @@ public class ClassifyController {
      */
     @RequestMapping("/classifyUpdateByCid")
     public String classifyUpdateByCid(@RequestParam("cid")Integer cid,@RequestParam("cname")String cname){
+        LOGGER.info("访问了classifyUpdateByCid");
         return JSON.toJSONString(classifyService.updateClassifyNameByCid(cname,cid));
     }
 
@@ -52,7 +56,7 @@ public class ClassifyController {
      */
     @RequestMapping("/delClassifyByCid")
     public String delClassifyByCid(@RequestParam("cid")Integer cid){
-        System.out.println(cid);
+        LOGGER.info("访问了delClassifyByCid");
         return JSON.toJSONString(classifyService.delClassifyByCid(cid));
     }
 
@@ -64,6 +68,7 @@ public class ClassifyController {
      */
     @RequestMapping("/addCassify")
     public String addCassify(@RequestParam("cname")String cname, @RequestParam("ck")Integer ck){
+        LOGGER.info("访问了addCassify");
         return JSON.toJSONString(classifyService.addCassify(cname,ck));
     }
 
@@ -77,6 +82,7 @@ public class ClassifyController {
      */
     @RequestMapping("/selectCassifyByCid")
     public String selectCassifyByCid(@RequestParam("cid")Integer cid){
+        LOGGER.info("访问了selectCassifyByCid");
         return JSON.toJSONString(classifyService.selectCassifyByCid(cid));
     }
 }

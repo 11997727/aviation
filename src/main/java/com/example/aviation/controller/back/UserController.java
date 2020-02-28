@@ -3,6 +3,8 @@ package com.example.aviation.controller.back;
 import com.alibaba.fastjson.JSON;
 import com.example.aviation.model.entity.User;
 import com.example.aviation.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -23,7 +25,7 @@ import java.util.Map;
 public class UserController {
     @Resource
     private UserService userService;
-
+    private static Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     /**
      * 用户列表
      * @param limit 每页记录数
@@ -36,6 +38,7 @@ public class UserController {
         Map<String ,Object> map = new HashMap<>();
         map.put("page",page);
         map.put("limit",limit);
+        LOGGER.info("访问了getUsersList");
         return JSON.toJSONString(userService.queryUserList(map));
     }
 
@@ -46,6 +49,7 @@ public class UserController {
      */
     @RequestMapping("/updateUser")
     public String updateUser(@RequestBody User user){
+        LOGGER.info("访问了updateUser");
         return JSON.toJSONString(userService.updateUser(user));
     }
 }

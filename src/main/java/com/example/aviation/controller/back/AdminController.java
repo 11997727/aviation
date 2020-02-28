@@ -4,9 +4,13 @@ import com.alibaba.fastjson.JSON;
 import com.example.aviation.model.entity.*;
 import com.example.aviation.service.AdminService;
 import com.example.aviation.utils.ApplicationParams;
+import com.example.aviation.utils.GetIP;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,16 +28,19 @@ import java.util.Map;
 public class AdminController {
     @Resource
     private AdminService adminService;
+
+    private static Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
     /**
      * 管理员登录
      * @param
      * @return
      */
     @PostMapping("/login")
-    public String login(String username,String password){
+    public String login(String username, String password, HttpServletRequest request){
         Admin admin = new Admin();
         admin.setAdminPassword(password);
         admin.setAdminPhone(username);
+        LOGGER.info(GetIP.getRealIp(request) +" "+"访问了login");
         return JSON.toJSONString(adminService.queryAdminByPhoneAndPassword(admin));
     }
 
@@ -43,6 +50,7 @@ public class AdminController {
      */
     @PostMapping("/initWeb")
     public String initWeb(){
+        LOGGER.info("访问了initWeb");
         return JSON.toJSONString(adminService.initWeb());
     }
 
@@ -52,6 +60,7 @@ public class AdminController {
      */
     @PostMapping("/updateWeb")
     public String updateWeb(@RequestBody Webseting webseting){
+        LOGGER.info("访问了updateWeb");
         return JSON.toJSONString(adminService.updateWeb(webseting));
     }
 
@@ -61,6 +70,7 @@ public class AdminController {
      */
     @PostMapping("/initKey")
     public String initKey(){
+        LOGGER.info("访问了initKey");
         return JSON.toJSONString(ApplicationParams.note);
     }
 
@@ -70,6 +80,7 @@ public class AdminController {
      */
     @PostMapping("/updateKey")
     public String updateKey(@RequestBody Note note){
+        LOGGER.info("访问了updateKey");
         return JSON.toJSONString(adminService.updateKey(note));
     }
 
@@ -80,6 +91,7 @@ public class AdminController {
      */
     @PostMapping("/initSmtp")
     public String initSmtp(){
+        LOGGER.info("访问了initSmtp");
         return JSON.toJSONString(ApplicationParams.emailSmtpSetting);
     }
 
@@ -89,6 +101,7 @@ public class AdminController {
      */
     @PostMapping("/updateSmtp")
     public String updateSmtp(@RequestBody EmailSmtpSetting emailSmtpSetting){
+        LOGGER.info("访问了updateSmtp");
         return JSON.toJSONString(adminService.updateSmtp(emailSmtpSetting));
     }
 
@@ -99,6 +112,7 @@ public class AdminController {
      */
     @PostMapping("/initAboutus")
     public String initAboutus(){
+        LOGGER.info("访问了initAboutus");
         return JSON.toJSONString(adminService.initAboutus());
     }
 
@@ -108,6 +122,7 @@ public class AdminController {
      */
     @PostMapping("/initService")
     public String initService(){
+        LOGGER.info("访问了initService");
         return JSON.toJSONString(adminService.initService());
     }
 
@@ -117,6 +132,7 @@ public class AdminController {
      */
     @PostMapping("/updateAboutus")
     public String updateAboutus(@RequestBody Aboutus aboutus){
+        LOGGER.info("访问了updateAboutus");
         return JSON.toJSONString(adminService.updateAboutus(aboutus));
     }
 
@@ -127,14 +143,14 @@ public class AdminController {
      */
     @PostMapping("/updateService")
     public String updateService(@RequestBody ServiceAgreement serviceAgreement){
-        System.out.println(serviceAgreement);
+        LOGGER.info("访问了updateService");
         return JSON.toJSONString(adminService.updateService(serviceAgreement));
     }
 
 
 
     /**
-     * 咨询列表
+     * 管理员列表
      * @param limit 每页记录数
      * @param page 当前页码号
      * @return
@@ -145,6 +161,7 @@ public class AdminController {
         Map<String ,Object> map = new HashMap<>();
         map.put("page",page);
         map.put("limit",limit);
+        LOGGER.info("访问了showAdmin");
         return JSON.toJSONString(adminService.getAdminList(map));
     }
 
@@ -155,6 +172,7 @@ public class AdminController {
      */
     @PostMapping("/addAdmin")
     public String addAdmin(@RequestBody Admin admin){
+        LOGGER.info("访问了addAdmin");
         return JSON.toJSONString(adminService.addAdmin(admin));
     }
 
@@ -167,18 +185,20 @@ public class AdminController {
      */
     @PostMapping("/updateAdmin")
     public String updateAdmin(@RequestBody Admin admin){
+        LOGGER.info("访问了updateAdmin");
         return JSON.toJSONString(adminService.updateAdmin(admin));
     }
 
 
 
     /**
-     * 添加管理员
+     * 删除管理员
      * @param
      * @return
      */
     @PostMapping("/delAdmin")
     public String delAdmin(@RequestParam("adminId") Integer adminId){
+        LOGGER.info("访问了delAdmin");
         return JSON.toJSONString(adminService.delAdmin(adminId));
     }
 

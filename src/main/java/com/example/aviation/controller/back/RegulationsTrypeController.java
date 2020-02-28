@@ -2,6 +2,8 @@ package com.example.aviation.controller.back;
 
 import com.alibaba.fastjson.JSON;
 import com.example.aviation.service.RegulationsTrypeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,13 +25,14 @@ import javax.annotation.Resource;
 public class RegulationsTrypeController {
     @Resource
     private RegulationsTrypeService regulationsTrypeService;
-
+    private static Logger LOGGER = LoggerFactory.getLogger(RegulationsTrypeController.class);
     /**
      * 一级分类列表 包含二级
      * @return
      */
     @RequestMapping("/regulationsTrypeList")
     public String selectRegulationsTrypeList(){
+        LOGGER.info("访问了regulationsTrypeList");
         return JSON.toJSONString(regulationsTrypeService.selectRegulationsTypeAndClassify());
     }
 
@@ -40,6 +43,7 @@ public class RegulationsTrypeController {
      */
     @RequestMapping("/addOneType")
     public String addOneType(@RequestParam("regulationsTypeName") String regulationsTypeName ) throws Exception {
+        LOGGER.info("访问了addOneType");
             return JSON.toJSONString(regulationsTrypeService.addOneType(regulationsTypeName));
     }
 
@@ -49,6 +53,7 @@ public class RegulationsTrypeController {
      */
     @RequestMapping("/showAllOneType")
     public String showAllOneType(){
+        LOGGER.info("访问了showAllOneType");
         return JSON.toJSONString(regulationsTrypeService.queryAllOneType());
     }
 
@@ -60,7 +65,7 @@ public class RegulationsTrypeController {
      */
     @RequestMapping("/delregulationsTrype")
     public String delregulationsTrype(@RequestParam("regulationsTypeId")Integer regulationsTypeId){
-        System.out.println(regulationsTypeId);
+        LOGGER.info("访问了delregulationsTrype");
         return JSON.toJSONString(regulationsTrypeService.delregulationsTrype(regulationsTypeId));
     }
 }

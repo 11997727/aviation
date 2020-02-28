@@ -6,6 +6,8 @@ import com.example.aviation.service.RegulationsService;
 import com.example.aviation.utils.QNYUtils;
 import com.qiniu.http.Response;
 import com.qiniu.storage.model.DefaultPutRet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,7 +31,7 @@ public class RegulationsController {
     private RegulationsService regulationsService;
     @Resource
     private QNYUtils qnyUtils;
-
+    private static Logger LOGGER = LoggerFactory.getLogger(RegulationsController.class);
     /**
      * 法规列表
      * @param limit 每页记录数
@@ -43,6 +45,7 @@ public class RegulationsController {
         map.put("page",page);
         map.put("limit",limit);
         Map<String, Object> map1 = regulationsService.selectRegulationsListVo(map);
+        LOGGER.info("访问了showRegulations");
         return JSON.toJSONString(map1);
     }
 
@@ -53,6 +56,7 @@ public class RegulationsController {
      */
     @RequestMapping(value = "/delRegulations")
     public String delRegulations(@RequestParam(value = "regulationsId") Integer regulationsId) throws Exception {
+        LOGGER.info("访问了delRegulations");
             return JSON.toJSONString(regulationsService.delRegulations(regulationsId));
 
     }
@@ -84,6 +88,7 @@ public class RegulationsController {
             //返回存储在七牛云上的key,用于删除
             map.put("key",defaultPutRet.key);
         }
+        LOGGER.info("访问了doUpload");
         return JSON.toJSONString(map);
     }
 
@@ -94,6 +99,7 @@ public class RegulationsController {
      */
     @RequestMapping("/delFile")
     public String delFiile(@RequestParam("key") String key){
+        LOGGER.info("访问了delFile");
         Map<String,Object>map=new HashMap<>();
         try {
            qnyUtils.delete(key);
@@ -115,6 +121,7 @@ public class RegulationsController {
      */
     @RequestMapping("/addRegulations")
     public String addAddRegulationsDto(@RequestBody RegulationsDto regulationsDto) throws Exception {
+        LOGGER.info("访问了addRegulations");
        return JSON.toJSONString(regulationsService.addRegulations(regulationsDto));
     }
 
@@ -125,6 +132,7 @@ public class RegulationsController {
      */
     @RequestMapping("/updateRegulations")
     public String updateRegulationsDto(@RequestBody RegulationsDto regulationsDto) throws Exception {
+        LOGGER.info("访问了updateRegulations");
         return JSON.toJSONString(regulationsService.updateRegulations(regulationsDto));
     }
 
@@ -135,6 +143,7 @@ public class RegulationsController {
      */
     @RequestMapping("/selectRegulationsByRegulationsId")
     public String selectRegulationsByRegulationsId(@RequestParam("regulationsId") Integer regulationsId){
+        LOGGER.info("访问了selectRegulationsByRegulationsId");
         return JSON.toJSONString(regulationsService.selectRegulationsByRegulationsId(regulationsId));
     }
 
@@ -146,6 +155,7 @@ public class RegulationsController {
      */
     @RequestMapping("/showRegulationsNameAndId")
     public String showRegulationsNameAndId(@RequestParam("cid") Integer cid){
+        LOGGER.info("访问了showRegulationsNameAndId");
         return JSON.toJSONString(regulationsService.showRegulationsNameAndId(cid));
     }
 
@@ -156,6 +166,7 @@ public class RegulationsController {
      */
     @RequestMapping("/showAll")
     public String showAllRegulationsNameAndId(){
+        LOGGER.info("访问了showAll");
         return JSON.toJSONString(regulationsService.showAllRegulationsNameAndId());
     }
 }
