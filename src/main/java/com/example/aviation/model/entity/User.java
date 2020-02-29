@@ -1,9 +1,10 @@
 package com.example.aviation.model.entity;
 
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 /**
  * @Project: aviation

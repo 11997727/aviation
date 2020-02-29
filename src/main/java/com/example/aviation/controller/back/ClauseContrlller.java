@@ -3,6 +3,7 @@ package com.example.aviation.controller.back;
 import com.alibaba.fastjson.JSON;
 import com.example.aviation.model.vo.ClauseVo;
 import com.example.aviation.service.ClauseService;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/clause")
 @CrossOrigin(origins = "*", maxAge = 3600)
+@Api(tags="法规目录条款相关操作")
 public class ClauseContrlller {
 @Resource
 private ClauseService clauseService;
@@ -75,7 +77,15 @@ private ClauseService clauseService;
      * @param clauseId
      * @return
      */
-    @RequestMapping("/queryClauseByClauseId")
+    @ApiOperation(value = "根据条款的id查询条款详情",notes = "正确返回条款信息，错误返回错误码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "clauseId",value = "条款主键",type = "Integer",example = "58"),
+    })
+    @ApiResponses({
+            @ApiResponse(code = 2004,message = "failed"),
+            @ApiResponse(code = 2001,message = "success")
+    })
+    @RequestMapping(value = "/queryClauseByClauseId" ,method = RequestMethod.POST)
     public String queryClauseByClauseId(@RequestParam("clauseId") Integer clauseId){
         LOGGER.info("访问了queryClauseByClauseId");
         return JSON.toJSONString(clauseService.queryClauseByClauseId(clauseId));
