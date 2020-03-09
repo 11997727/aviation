@@ -1,14 +1,21 @@
 package com.example.aviation.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.example.aviation.mapper.UserMapper;
 import com.example.aviation.model.entity.User;
 import com.example.aviation.service.UserService;
+import com.example.aviation.utils.MD5;
+import com.example.aviation.utils.RedisUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author 吴成卓
@@ -22,6 +29,8 @@ import java.util.Map;
 public class UserServiceImpl implements UserService {
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private RedisUtils redisUtils;
     @Override
     public Map<String, Object> queryUserList(Map<String, Object> map) {
         Map<String,Object>resultMap=new HashMap<String, Object>();
@@ -55,16 +64,41 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<String, Object> WeChatLogin(User user) {
+    public Map<String, Object> WeChatLogin(User user,String type) {
         Map<String,Object>resultMap=new HashMap<String, Object>();
         resultMap.put("msg","failed");
         resultMap.put("code",2004);
         User u=userMapper.WeChatLogin(user);
         if(u!=null){
+            System.out.println("登录成功");
             resultMap.put("code",2001);
             resultMap.put("msg","success");
             resultMap.put("data",u);
+            String token = this.createToken(u, type);
+            resultMap.put("token",token);
+            this.saveToken(u,token);
         }
         return resultMap;
+    }
+    //存放token
+    private void saveToken(User user1, String token) {
+        String tokenKey="User"+user1.getUserId();
+        String tokenValue=null;
+        if((tokenValue=(String) redisUtils.get(tokenKey))!=null){ //单点登录
+            redisUtils.delete(tokenKey);
+            redisUtils.delete(tokenValue);
+        }
+        redisUtils.set(tokenKey,token,3600000);//token 设置1小时
+        redisUtils.set(token, JSON.toJSONString(user1),3600000);
+    }
+    //创建token
+    private String createToken(User user, String type) {
+        StringBuilder sb=new StringBuilder();
+        sb.append("token-");
+        sb.append(type);
+        sb.append(MD5.getMD5(user.getUserId().toString(),32));
+        sb.append(LocalDateTime.now(ZoneOffset.of("+8")).format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
+        sb.append(UUID.randomUUID().toString().substring(0,6));
+        return sb.toString();
     }
 }

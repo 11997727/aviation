@@ -27,9 +27,13 @@ public class RegulationsDto {
      */
     private Integer regulationsTypeId;
     /**
-     * 二级分类
+     * 二级分类id
      */
     private Integer cid;
+    /**
+     * 二级分类id
+     */
+    private Integer classifyForeignKey;
     /**
      * 法规的主键
      */

@@ -32,5 +32,5 @@ public interface UserService {
      * @param user
      * @return
      */
-    Map<String,Object> WeChatLogin(User user);
+    Map<String,Object> WeChatLogin(User user,String type);
 }

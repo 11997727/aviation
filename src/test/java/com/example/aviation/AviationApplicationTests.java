@@ -10,6 +10,7 @@ import com.example.aviation.model.entity.Directory;
 import com.example.aviation.model.vo.RegulationsTrypeAndClassify;
 import com.example.aviation.service.DirectoryService;
 import com.example.aviation.service.RegulationsService;
+import com.example.aviation.utils.RedisUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,6 +34,14 @@ public class AviationApplicationTests {
     private RegulationsMapper regulationsMapper;
     @Resource
     private DirectoryService directoryService;
+    @Resource
+    private RedisUtils redisUtils;
+
+    @Test
+    public void get(){
+        Object o = redisUtils.judgeToken("token-Smartphone1679091c5a880faf6fb5e6087eb1b2dc202003042346433f4701");
+        System.out.println(o.toString());
+    }
     @Test
     public void contextLoads() {
         List<Integer>list=new ArrayList<>();

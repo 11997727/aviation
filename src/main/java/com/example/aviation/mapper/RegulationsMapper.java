@@ -29,7 +29,7 @@ public interface RegulationsMapper {
      *法规列表 数量
      * @return
      */
-    Long selectListCount();
+    Long selectListCount(@Param("map") Map<String,Object>map);
 
     /**
      * 删除法规

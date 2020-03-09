@@ -15,7 +15,17 @@
 <!--c.cname,rt.regulations_type_name-->
 <!--    </sql>-->
     <select id="selectList" resultMap="regulations">
-        select `regulations_id`,`regulations_part_no`,`regulations_part_no_alias`,`regulations_version`,`regulations_name`,`regulations_show_status` from regulations
+        select `regulations_id`,`regulations_part_no`,`regulations_part_no_alias`,`regulations_version`,`regulations_name`,`regulations_show_status`,`classify_foreignkey` from regulations
+        <where>
+            <if test="map.regulationsTypeId!=null and map.regulationsTypeId!=''">
+                and classify_foreignkey in (
+                select `cid` from classify where `ck`=#{map.regulationsTypeId}
+                )
+            </if>
+            <if test="map.cid!=null and map.cid!=''">
+                and classify_foreignkey=#{map.cid}
+            </if>
+        </where>
         limit #{map.index},#{map.limit}
     </select>
 <!--    <resultMap id="regulationsAndTypeAndClassify" type="com.example.aviation.model.vo.RegulationsAndTypeAndClassify">-->
@@ -39,6 +49,16 @@
 <!--    </resultMap>-->
     <select id="selectListCount" resultType="java.lang.Long">
         select count(*) from regulations
+        <where>
+            <if test="map.regulationsTypeId!=null and map.regulationsTypeId!=''">
+                and classify_foreignkey in (
+                select `cid` from classify where `ck`=#{map.regulationsTypeId}
+                )
+            </if>
+            <if test="map.cid!=null and map.cid!=''">
+                and classify_foreignkey=#{map.cid}
+            </if>
+        </where>
     </select>
     <delete id="delRegulationsById">
         DELETE FROM regulations WHERE regulations_id=#{regulationsId}
@@ -52,7 +72,7 @@
     </select>
     <update id="updateRegulations">
         update regulations set `key`=#{key},`regulations_part_no`=#{regulationsPartNo},`regulations_part_no_alias`=#{regulationsPartNoAlias},`regulations_version`=#{regulationsVersion},`regulations_name`=#{regulationsName},`regulations_show_status`=#{regulationsShowStatus}
-        ,`regulations_icon_path`=#{regulationsIconPath},`regulations_pdf_name`=#{regulationsPdfName},`regulations_pdf_path`=#{regulationsPdfPath},`regulations_version_explain`=#{regulationsVersionExplain},`regulations_updatetime`=SYSDATE() where `regulations_id`=#{regulationsId}
+        ,`regulations_icon_path`=#{regulationsIconPath},`regulations_pdf_name`=#{regulationsPdfName},`regulations_pdf_path`=#{regulationsPdfPath},`regulations_version_explain`=#{regulationsVersionExplain},`classify_foreignkey`=#{classifyForeignKey},`regulations_updatetime`=SYSDATE() where `regulations_id`=#{regulationsId}
     </update>
     <select id="selectRegulationsNameAndId" resultMap="regulations">
         select `regulations_id`,`regulations_name` from regulations where classify_foreignkey=#{cid}

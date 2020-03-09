@@ -41,7 +41,7 @@ public class RegulationsServiceImpl implements RegulationsService {
         int index=(page-1)*limit;
         map.put("index",index);
         List<Regulations> list = regulationsMapper.selectList(map);
-        Long num = regulationsMapper.selectListCount();
+        Long num = regulationsMapper.selectListCount(map);
         if(num>0){
             resultMap.put("code",2001);
             resultMap.put("data",list);

@@ -40,10 +40,15 @@ public class RegulationsController {
      */
     @RequestMapping("/showRegulations")
     public String showRegulations(@RequestParam(value = "limit",required = false,defaultValue = "5") Integer limit,
-                                  @RequestParam(value = "page",required = false,defaultValue = "1") Integer page){
+                                  @RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
+                                  @RequestParam(value = "cid",required = false,defaultValue = "") Integer cid,
+                                  @RequestParam(value = "regulationsTypeId",required = false,defaultValue = "") Integer regulationsTypeId){
         Map<String ,Object> map = new HashMap<>();
         map.put("page",page);
         map.put("limit",limit);
+        map.put("cid",cid);
+        map.put("regulationsTypeId",regulationsTypeId);
+        System.out.println(regulationsTypeId);
         Map<String, Object> map1 = regulationsService.selectRegulationsListVo(map);
         LOGGER.info("访问了showRegulations");
         return JSON.toJSONString(map1);
